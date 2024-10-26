@@ -451,21 +451,21 @@ restart_button = Button(screen_width // 2 - 30, screen_height // 2 + 50, restart
 start_button = Button(screen_width // 2 - 210, screen_height // 2 - 100, start_img)
 exit_button = Button(screen_width // 2 + 90, screen_height // 2 + 50, exit_img)
 
+
+# The main game loop that runs continuously until the game is exited.
 while run:
 
-    clock.tick(fps)
+    clock.tick(fps)                 # control the game's frame rate
+    screen.blit(bg_img, (0, 0))     # render the background image
 
-    screen.blit(bg_img, (0, 0))
-
-    if main_menu == True:
-        if exit_button.draw():
+    if main_menu == True:           # check if the main menu is active
+        if exit_button.draw():      # check for exit button click to close the game
             run = False
-        if start_button.draw():
+        if start_button.draw():     # check for start button click to enter the game
             main_menu = False
     else:
-        world.draw()
-
-        if game_over == 0:
+        world.draw()                # draw the game world
+        if game_over == 0:          # if the game is not over, update game elements
             blob_group.update()
             platform_group.update()
             # update score
@@ -473,17 +473,19 @@ while run:
             if pygame.sprite.spritecollide(player, coin_group, True):
                 score += 1
                 coin_fx.play()
+            # display the current score on the screen
             draw_text('X ' + str(score), font_score, white, tile_size - 6, 6)
 
+        # draw game elements on the screen
         blob_group.draw(screen)
         platform_group.draw(screen)
         lava_group.draw(screen)
         coin_group.draw(screen)
         exit_group.draw(screen)
 
-        game_over = player.update(game_over)
+        game_over = player.update(game_over)    # update the player's state
 
-        # if player has died
+        # check if the player has died
         if game_over == -1:
             if restart_button.draw():
                 world_data = []
@@ -491,16 +493,17 @@ while run:
                 game_over = 0
                 score = 0
 
-        # if player has completed the level
+        # check if the player has completed the level
         if game_over == 1:
             # reset game and go to next level
             level += 1
             if level <= max_levels:
-                # reset level
+                # reset level data
                 world_data = []
                 world = reset_level(level)
                 game_over = 0
             else:
+                # display winning message if game completed
                 draw_text('YOU WIN!', font, orange, (screen_width // 2) - 84, screen_height // 2)
                 if restart_button.draw():
                     level = 1
@@ -510,10 +513,13 @@ while run:
                     game_over = 0
                     score = 0
 
+    # handle events like quitting the game
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            run = False
+            run = False     # exit the game loop
 
+    # update the display with the drawn frame
     pygame.display.update()
 
+# clean up and exit the game
 pygame.quit()
