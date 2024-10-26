@@ -1,3 +1,22 @@
+
+# Define level data with a dictionary where each key represents a different level in the game.
+# Each list within a level represents a row of tiles in that level.
+# Numbers represent different types of tiles or objects in the game.
+
+"""
+    '0' represents open space
+    '1' represents a platform (wall or boundary)
+    '2' represents a platform (full-size)
+    '3' represents a moving enemy
+    '4' represents left-right moving platforms
+    '5' represents up-down moving platforms
+    '6' represents lava
+    '7' represents a star to collect
+    '8' represents the dor to the next level
+    '9' represents a platform (half-size)
+"""
+
+
 level_data = {
     1: [
         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],

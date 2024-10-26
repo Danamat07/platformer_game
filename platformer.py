@@ -1,8 +1,5 @@
 import pygame
-from pygame.locals import *
 from pygame import mixer
-import pickle
-from os import path
 from levelData import level_data
 
 pygame.mixer.pre_init(44100, -16, 2, 512)
@@ -52,33 +49,42 @@ jump_fx.set_volume(0.5)
 game_over_fx = pygame.mixer.Sound('audio/game_over.wav')
 game_over_fx.set_volume(0.5)
 
+
+# Draws the title of the game on the screen.
 def draw_title():
     title_font = pygame.font.SysFont('Bauhaus 93', 72)  # Larger font for the title
     title_text = 'Platformer'
     draw_text(title_text, title_font, orange, (screen_width // 2) - 150, screen_height // 2 - 100)
 
+
+# This function creates a surface from the text string and blits it onto the main game screen at the specified coordinates.
 def draw_text(text, font, text_col, x, y):
     img = font.render(text, True, text_col)
     screen.blit(img, (x, y))
 
-# reset level function
+
+# Resets the game level to its initial state.
 def reset_level(level):
     player.reset(60, screen_height - 78)
-    blob_group.empty()
-    coin_group.empty()
-    platform_group.empty()
-    lava_group.empty()
-    exit_group.empty()
-
+    blob_group.empty()      # Clear blobs
+    coin_group.empty()      # Clear coins
+    platform_group.empty()  # Clear platforms
+    lava_group.empty()      # Clear lava
+    exit_group.empty()      # Clear exit points
     if level in level_data:
         world_data = level_data[level]
     else:
-        world_data = []  # Use an empty world_data if the level is not defined
-    world = World(world_data)
+        world_data = []         # Use an empty world_data if the level is not defined
+    world = World(world_data)   # Create a new world based on level data
+    return world                # Return the new world
 
-    return world
 
+# A Button class to represent a clickable button in a Pygame interface.
 class Button():
+
+    # Initializes a Button instance.
+    # Sets the button's position based on the provided coordinates, initializes a rect for detecting clicks,
+    # and sets the clicked status to False.
     def __init__(self, x, y, image):
         self.image = image
         self.rect = self.image.get_rect()
@@ -86,63 +92,67 @@ class Button():
         self.rect.y = y
         self.clicked = False
 
+    # Draws the button on the screen and checks if it has been clicked.
+    #This method checks if the mouse cursor is over the button and whether the left mouse button has been pressed.
+    # If clicked, it returns True, signaling an action has been triggered. Otherwise, it returns False.
     def draw(self):
         action = False
-
         # get mouse position
         pos = pygame.mouse.get_pos()
-
         # check mouseover and clicked conditions
         if self.rect.collidepoint(pos):
             if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
                 action = True
                 self.clicked = True
-
         if pygame.mouse.get_pressed()[0] == 0:
             self.clicked = False
-
         # draw button
         screen.blit(self.image, self.rect)
-
         return action
 
 
+# A Player class to represent a playable character in a Pygame platformer game.
 class Player():
+
+    # Initializes a Player instance and sets the initial position.
+    # Calls the reset method to initialize images and set player properties.
     def __init__(self, x, y):
         self.reset(x, y)
 
+    # Updates the player's position, handles inputs, animations, and collision detection.
     def update(self, game_over):
-        dx = 0
-        dy = 0
-        walk_cooldown = 3
-        col_thresh = 12
+        dx = 0              # Horizontal movement delta
+        dy = 0              # Vertical movement delta
+        walk_cooldown = 3   # Frames to wait between walk animation updates
+        col_thresh = 12     # Collision threshold for platform handling
 
         if game_over == 0:
-            # get keypresses
+            # Handle player input
             key = pygame.key.get_pressed()
             if key[pygame.K_SPACE] and self.jumped == False and self.in_air == False:
                 jump_fx.play()
-                self.vel_y = -12
+                self.vel_y = -12    # Jump height
                 self.jumped = True
             if key[pygame.K_SPACE] == False:
                 self.jumped = False
-            if key[pygame.K_a]:
-                dx -= 5
+            if key[pygame.K_LEFT]:
+                dx -= 5     # Move left
                 self.counter += 1
                 self.direction = -1
-            if key[pygame.K_d]:
-                dx += 5
+            if key[pygame.K_RIGHT]:
+                dx += 5     # Move right
                 self.counter += 1
                 self.direction = 1
-            if key[pygame.K_a] == False and key[pygame.K_d] == False:
+            if key[pygame.K_LEFT] == False and key[pygame.K_RIGHT] == False:
                 self.counter = 0
                 self.index = 0
+                # Set idle image based on direction
                 if self.direction == 1:
                     self.image = self.images_right[self.index]
                 if self.direction == -1:
                     self.image = self.images_left[self.index]
 
-            # handle animation
+            # Handle walk animation
             if self.counter > walk_cooldown:
                 self.counter = 0
                 self.index += 1
@@ -153,13 +163,11 @@ class Player():
                 if self.direction == -1:
                     self.image = self.images_left[self.index]
 
-            # add gravity
-            self.vel_y += 1
-            if self.vel_y > 10:
-                self.vel_y = 10
+            # Apply gravity
+            self.vel_y = min(self.vel_y + 1, 10)    # Limit fall speed
             dy += self.vel_y
 
-            # check for collision
+            # Check collision with tiles
             self.in_air = True
             for tile in world.tile_list:
                 # check for collision in x direction
@@ -215,18 +223,19 @@ class Player():
             self.rect.x += dx
             self.rect.y += dy
 
+        # Display game over message and apply death animation
         elif game_over == -1:
             self.image = self.dead_image
             draw_text('GAME OVER', font, orange, (screen_width // 2) - 120, screen_height // 2)
             if self.rect.y > 120:
                 self.rect.y -= 5
 
-        # draw player onto screen
-        screen.blit(self.image, self.rect)
-        #pygame.draw.rect(screen, (255, 255, 255), self.rect, 1)
-
+        screen.blit(self.image, self.rect)  # Draw player onto the screen
         return game_over
 
+    # Resets the player's position, animation, and attributes.
+    # This method initializes the player's images for animation, sets the starting position and size,
+    # and resets movement and status attributes.
     def reset(self, x, y):
         self.images_right = []
         self.images_left = []
@@ -251,7 +260,11 @@ class Player():
         self.in_air = True
 
 
+# The World class is responsible for creating and displaying the game's world elements based on a provided data structure.
+# Each element (tile, platform, enemy, etc.) in the game world is loaded, positioned, and displayed on the screen.
 class World():
+
+    # Initializes the World instance by creating tiles and interactive objects based on the input data.
     def __init__(self, data):
         self.tile_list = []
 
@@ -260,59 +273,65 @@ class World():
         ground_img = pygame.image.load('images/stoneMid.png')
         half_platform = pygame.image.load('images/stoneHalfMid.png')
 
+        # Iterate through rows and columns in the data to create the world
         row_count = 0
         for row in data:
             col_count = 0
             for tile in row:
-                if tile == 1:
+                if tile == 1:   # Create stone tile
                     img = pygame.transform.scale(stone_img, (tile_size, tile_size))
                     img_rect = img.get_rect()
                     img_rect.x = col_count * tile_size
                     img_rect.y = row_count * tile_size
                     tile = (img, img_rect)
                     self.tile_list.append(tile)
-                if tile == 2:
+                if tile == 2:   # Create ground tile
                     img = pygame.transform.scale(ground_img, (tile_size, tile_size))
                     img_rect = img.get_rect()
                     img_rect.x = col_count * tile_size
                     img_rect.y = row_count * tile_size
                     tile = (img, img_rect)
                     self.tile_list.append(tile)
-                if tile == 3:
+                if tile == 3:   # Create enemy and add it to the blob group
                     blob = Enemy(col_count * tile_size, row_count * tile_size + 9)
                     blob_group.add(blob)
-                if tile == 4:
+                if tile == 4:   # Create horizontal moving platform
                     platform = Platform(col_count * tile_size, row_count * tile_size, 1, 0)
                     platform_group.add(platform)
-                if tile == 5:
+                if tile == 5:   # Create vertical moving platform
                     platform = Platform(col_count * tile_size, row_count * tile_size, 0, 1)
                     platform_group.add(platform)
-                if tile == 6:
+                if tile == 6:   # Create lava object and add to lava group
                     lava = Lava(col_count * tile_size, row_count * tile_size + (tile_size // 2))
                     lava_group.add(lava)
-                if tile == 7:
+                if tile == 7:   # Create coin object and add to coin group
                     coin = Coin(col_count * tile_size + (tile_size // 2), row_count * tile_size + (tile_size // 2))
                     coin_group.add(coin)
-                if tile == 8:
+                if tile == 8:   # Create exit object and add to exit group
                     exit = Exit(col_count * tile_size, row_count * tile_size - (tile_size // 2))
                     exit_group.add(exit)
-                col_count += 1
-                if tile == 9:
+                if tile == 9:   # Create half platform tile
                     img = pygame.transform.scale(half_platform, (tile_size, tile_size // 2))
                     img_rect = img.get_rect()
                     img_rect.x = col_count * tile_size
                     img_rect.y = row_count * tile_size
                     tile = (img, img_rect)
                     self.tile_list.append(tile)
+                col_count += 1
             row_count += 1
 
+    # Draws each tile in the world on the screen.
+    # This method iterates through the tile_list and blits each tile's image at its corresponding position, displaying it on the game screen.
     def draw(self):
         for tile in self.tile_list:
             screen.blit(tile[0], tile[1])
-            #pygame.draw.rect(screen, (255, 255, 255), tile[1], 1)
 
 
+# The Enemy class represents an enemy sprite in the game.
+# It handles the loading, positioning, and movement of the enemy character, which moves horizontally in a back-and-forth pattern.
 class Enemy(pygame.sprite.Sprite):
+
+    # Initializes the enemy sprite with its image, starting position, and movement variables.
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load('images/blob.png')
@@ -322,6 +341,10 @@ class Enemy(pygame.sprite.Sprite):
         self.move_direction = 1
         self.move_counter = 0
 
+    # Updates the enemy's position by moving it horizontally.
+    # The method increments the x-coordinate of the rect by the move_direction value (either left or right).
+    # The move_counter tracks the distance traveled in one direction and when it exceeds a threshold (30),
+    # the enemy reverses direction by flipping the sign of move_direction and resetting move_counter.
     def update(self):
         self.rect.x += self.move_direction
         self.move_counter += 1
@@ -330,7 +353,11 @@ class Enemy(pygame.sprite.Sprite):
             self.move_counter *= -1
 
 
+# The Platform class represents a moving platform in the game, allowing for horizontal or vertical movement.
+# It inherits from pygame's Sprite class, which allows it to be added to sprite groups and benefit from pygame's collision detection.
 class Platform(pygame.sprite.Sprite):
+
+    # Initializes the platform sprite with its image, starting position, and movement parameters.
     def __init__(self, x, y, move_x, move_y):
         pygame.sprite.Sprite.__init__(self)
         img = pygame.image.load('images/stoneHalfMid.png')
@@ -343,6 +370,10 @@ class Platform(pygame.sprite.Sprite):
         self.move_x = move_x
         self.move_y = move_y
 
+    # Updates the platform's position based on its move_x and move_y values, alternating directions at regular intervals.
+    # Moves the platform by `move_direction * move_x` horizontally and `move_direction * move_y` vertically.
+    # Increments move_counter with each update. If the move_counter exceeds 30 units in either direction,
+    # the platform reverses direction by flipping the sign of move_direction and resetting move_counter.
     def update(self):
         self.rect.x += self.move_direction * self.move_x
         self.rect.y += self.move_direction * self.move_y
@@ -351,7 +382,12 @@ class Platform(pygame.sprite.Sprite):
             self.move_direction *= -1
             self.move_counter *= -1
 
+
+# The Lava class represents a stationary hazard in the game, which causes the player to lose if they come into contact with it.
+# It inherits from pygame's Sprite class, allowing it to be used within sprite groups for collision detection.
 class Lava(pygame.sprite.Sprite):
+
+    # Initializes the Lava sprite with its image and position on the screen.
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
         img = pygame.image.load('images/lava.png')
@@ -360,7 +396,13 @@ class Lava(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
 
+
+# The Coin class represents a collectible item in the game.
+# When the player collides with a Coin sprite, it can be collected to increase the player's score or for other purposes.
+# This class inherits from pygame's Sprite class, enabling it to be included in sprite groups for collision detection.
 class Coin(pygame.sprite.Sprite):
+
+    # Initializes the Coin sprite with its image and position on the screen.
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
         img = pygame.image.load('images/star.png')
@@ -368,7 +410,12 @@ class Coin(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
 
+
+# The Exit class represents an exit point in the game, where players can finish the level or stage.
+# This class inherits from pygame's Sprite class, allowing it to be part of sprite groups for efficient collision detection and rendering.
 class Exit(pygame.sprite.Sprite):
+
+    # Initializes the Exit sprite with its image and position on the screen.
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
         img = pygame.image.load('images/exit.png')
@@ -378,23 +425,26 @@ class Exit(pygame.sprite.Sprite):
         self.rect.y = y
 
 
+# Initialize the player character at a specified position
 player = Player(60, screen_height - 78)
 
-blob_group = pygame.sprite.Group()
-platform_group = pygame.sprite.Group()
-lava_group = pygame.sprite.Group()
-coin_group = pygame.sprite.Group()
-exit_group = pygame.sprite.Group()
+# Create sprite groups for different game entities
+blob_group = pygame.sprite.Group()      # Group for enemy blobs
+platform_group = pygame.sprite.Group()  # Group for platforms
+lava_group = pygame.sprite.Group()      # Group for lava hazards
+coin_group = pygame.sprite.Group()      # Group for collectible coins
+exit_group = pygame.sprite.Group()      # Group for exit points
 
 # create coin for showing the score
 score_coin = Coin(tile_size // 2, tile_size // 2)
 coin_group.add(score_coin)
 
+# Load world data based on the current level
 if level in level_data:
-    world_data = level_data[level]
+    world_data = level_data[level]  # Retrieve the level data if it exists
 else:
-    world_data = []  # Use an empty world_data if the level is not defined
-world = World(world_data)
+    world_data = []                 # Use an empty world_data if the level is not defined
+world = World(world_data)           # Instantiate a World object with the level's data
 
 # create buttons
 restart_button = Button(screen_width // 2 - 30, screen_height // 2 + 50, restart_img)
