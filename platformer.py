@@ -126,15 +126,15 @@ class Player():
                 self.jumped = True
             if key[pygame.K_SPACE] == False:
                 self.jumped = False
-            if key[pygame.K_LEFT]:
+            if key[pygame.K_a]:
                 dx -= 5
                 self.counter += 1
                 self.direction = -1
-            if key[pygame.K_RIGHT]:
+            if key[pygame.K_d]:
                 dx += 5
                 self.counter += 1
                 self.direction = 1
-            if key[pygame.K_LEFT] == False and key[pygame.K_RIGHT] == False:
+            if key[pygame.K_a] == False and key[pygame.K_d] == False:
                 self.counter = 0
                 self.index = 0
                 if self.direction == 1:
