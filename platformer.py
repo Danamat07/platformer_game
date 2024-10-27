@@ -31,13 +31,24 @@ score = 0
 
 # define colours
 white = (255, 255, 255)
-orange = (255, 165, 0)
+blue = (0, 90, 255)
 
 # load images
 bg_img = pygame.image.load('images/bg.png')
 restart_img = pygame.image.load('images/restart_button.png')
 start_img = pygame.image.load('images/start_button.png')
 exit_img = pygame.image.load('images/exit_button.png')
+shroomRed_left_img = pygame.image.load('images/shroomRedAltLeft.png')
+shroomRed_mid_img = pygame.image.load('images/shroomRedAltMidAlt.png')
+shroomRed_right_img = pygame.image.load('images/shroomRedAltRight.png')
+shroomBrown_left_img = pygame.image.load('images/shroomBrownAltSpotsLeft.png')
+shroomBrown_mid_img = pygame.image.load('images/shroomBrownAltSpotsMidAlt.png')
+shroomBrown_right_img = pygame.image.load('images/shroomBrownAltSpotsRight.png')
+stem_base_img = pygame.image.load('images/stemBaseAlt.png')
+stem_vine_img = pygame.image.load('images/stemVine.png')
+stem_shroom_img = pygame.image.load('images/stemShroom.png')
+stem_crown_img = pygame.image.load('images/stemCrown.png')
+tiny_shroom_img = pygame.image.load('images/tinyShroom_brown.png')
 
 # load sounds
 pygame.mixer.music.load('audio/music.wav')
@@ -54,7 +65,7 @@ game_over_fx.set_volume(0.5)
 def draw_title():
     title_font = pygame.font.SysFont('Bauhaus 93', 72)  # Larger font for the title
     title_text = 'Platformer'
-    draw_text(title_text, title_font, orange, (screen_width // 2) - 150, screen_height // 2 - 100)
+    draw_text(title_text, title_font, blue, (screen_width // 2) - 150, screen_height // 2 - 100)
 
 
 # This function creates a surface from the text string and blits it onto the main game screen at the specified coordinates.
@@ -226,7 +237,7 @@ class Player():
         # Display game over message and apply death animation
         elif game_over == -1:
             self.image = self.dead_image
-            draw_text('GAME OVER', font, orange, (screen_width // 2) - 120, screen_height // 2)
+            draw_text('GAME OVER', font, blue, (screen_width // 2) - 120, screen_height // 2)
             if self.rect.y > 120:
                 self.rect.y -= 5
 
@@ -457,6 +468,19 @@ while run:
 
     clock.tick(fps)                 # control the game's frame rate
     screen.blit(bg_img, (0, 0))     # render the background
+    screen.blit(stem_base_img, (130, 525))
+    screen.blit(stem_crown_img, (130, 435))
+    screen.blit(stem_vine_img, (130, 475))
+    screen.blit(shroomBrown_mid_img, (130, 395))
+    screen.blit(shroomBrown_left_img, (60, 395))
+    screen.blit(shroomBrown_right_img, (200, 395))
+    screen.blit(stem_base_img, (420, 525))
+    screen.blit(stem_shroom_img, (420, 455))
+    screen.blit(stem_crown_img, (420, 350))
+    screen.blit(stem_vine_img, (420, 385))
+    screen.blit(shroomRed_mid_img, (420, 310))
+    screen.blit(shroomRed_left_img, (350, 310))
+    screen.blit(shroomRed_right_img, (490, 310))
 
     if main_menu == True:           # check if the main menu is active
         if exit_button.draw():      # check for exit button click to close the game
@@ -504,7 +528,7 @@ while run:
                 game_over = 0
             else:
                 # display winning message if game completed
-                draw_text('YOU WIN!', font, orange, (screen_width // 2) - 84, screen_height // 2)
+                draw_text('YOU WIN!', font, blue, (screen_width // 2) - 84, screen_height // 2)
                 if restart_button.draw():
                     level = 1
                     # reset level
