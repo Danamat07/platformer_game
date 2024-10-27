@@ -1,3 +1,5 @@
+Note: All files for this project can be found in the master branch of the repository.
+
 Overview: This is a 2D platformer game developed using Python and the Pygame library. Players navigate through a series of levels filled with obstacles, enemies, and collectibles. The game is designed to provide an engaging platforming experience with smooth character mechanics and interactive gameplay.
 
 Technologies used:
@@ -25,5 +27,3 @@ Installation:
   1. Install Pygame library for graphics and game functionalities using pip:  "pip install pygame"
   2. Clone the Repository: "git clone https://github.com/Danamat07/platformer_game.git" then "cd platformer_game"
   3. Run the Game:  "python main.py"
-
-Note: All files for this project can be found in the master branch of the repository.
