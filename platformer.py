@@ -456,7 +456,7 @@ exit_button = Button(screen_width // 2 + 90, screen_height // 2 + 50, exit_img)
 while run:
 
     clock.tick(fps)                 # control the game's frame rate
-    screen.blit(bg_img, (0, 0))     # render the background image
+    screen.blit(bg_img, (0, 0))     # render the background
 
     if main_menu == True:           # check if the main menu is active
         if exit_button.draw():      # check for exit button click to close the game
