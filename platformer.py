@@ -26,7 +26,7 @@ tile_size = 30
 game_over = 0
 main_menu = True
 level = 1
-max_levels = 7
+max_levels = 10
 score = 0
 
 # define colours
