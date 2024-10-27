@@ -25,3 +25,5 @@ Installation:
   1. Install Pygame library for graphics and game functionalities using pip:  "pip install pygame"
   2. Clone the Repository: "git clone https://github.com/Danamat07/platformer_game.git" then "cd platformer_game"
   3. Run the Game:  "python main.py"
+
+Note: All files for this project can be found in the master branch of the repository.
