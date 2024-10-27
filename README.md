@@ -27,3 +27,5 @@ Installation:
   1. Install Pygame library for graphics and game functionalities using pip:  "pip install pygame"
   2. Clone the Repository: "git clone https://github.com/Danamat07/platformer_game.git" then "cd platformer_game"
   3. Run the Game:  "python main.py"
+
+Assets: This project uses images and sounds from the [Platformer Pack Redux](https://kenney.nl/assets/platformer-pack-redux) by [Kenney.nl](https://kenney.nl/). These assets are provided under a public domain license, allowing free use in personal and commercial projects.
