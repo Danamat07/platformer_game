@@ -36,7 +36,7 @@ class Player():
                 dx += 5     # Move right
                 self.counter += 1
                 self.direction = 1
-            if key[pygame.K_LEFT] == False and key[pygame.K_RIGHT] == False:
+            if not key[pygame.K_LEFT] and not key[pygame.K_RIGHT]:
                 self.counter = 0
                 self.index = 0
                 # Set idle image based on direction
@@ -115,6 +115,16 @@ class Player():
             # update player coordinates
             self.rect.x += dx
             self.rect.y += dy
+
+            # Invisible boundaries to prevent player from leaving the screen
+            if self.rect.left < 0:  # left boundary
+                self.rect.left = 0
+            if self.rect.right > screen_width:  # right boundary
+                self.rect.right = screen_width
+            if self.rect.top < 0:  # top boundary
+                self.rect.top = 0
+            if self.rect.bottom > screen_height:  # bottom boundary
+                self.rect.bottom = screen_height
 
         # Display game over message and apply death animation
         elif game_over == -1:
