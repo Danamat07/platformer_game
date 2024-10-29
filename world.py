@@ -8,18 +8,18 @@ class World():
     def __init__(self, data):
 
         from enemy import Enemy
-        from platformer import tile_size, blob_group, platform_group, lava_group, coin_group, exit_group
+        from platformer import tile_size, blob_group, platform_group, water_group, coin_group, exit_group
         from coin import Coin
         from exit import Exit
-        from lava import Lava
+        from water import Water
         from platform import Platform
 
         self.tile_list = []
 
         # load images
-        stone_img = pygame.image.load('images/stoneCenter.png')
-        ground_img = pygame.image.load('images/stoneMid.png')
-        half_platform = pygame.image.load('images/stoneHalfMid.png')
+        stone_img = pygame.image.load('images/sandCenter.png')
+        ground_img = pygame.image.load('images/sandMid.png')
+        half_platform = pygame.image.load('images/sandHalf_mid.png')
 
         # Iterate through rows and columns in the data to create the world
         row_count = 0
@@ -50,8 +50,8 @@ class World():
                     platform = Platform(col_count * tile_size, row_count * tile_size, 0, 1)
                     platform_group.add(platform)
                 if tile == 6:   # Create lava object and add to lava group
-                    lava = Lava(col_count * tile_size, row_count * tile_size + (tile_size // 2))
-                    lava_group.add(lava)
+                    lava = Water(col_count * tile_size, row_count * tile_size + (tile_size // 2))
+                    water_group.add(lava)
                 if tile == 7:   # Create coin object and add to coin group
                     coin = Coin(col_count * tile_size + (tile_size // 2), row_count * tile_size + (tile_size // 2))
                     coin_group.add(coin)

@@ -11,7 +11,7 @@ class Player():
     # Updates the player's position, handles inputs, animations, and collision detection.
     def update(self, game_over):
 
-        from platformer import blob_group, game_over_fx, lava_group, exit_group, platform_group, draw_text, font, blue, \
+        from platformer import blob_group, game_over_fx, water_group, exit_group, platform_group, draw_text, font, blue, \
         screen_width, screen_height, screen, jump_fx, world
 
         dx = 0              # Horizontal movement delta
@@ -84,7 +84,7 @@ class Player():
                 game_over_fx.play()
 
             # check for collision with lava
-            if pygame.sprite.spritecollide(self, lava_group, False):
+            if pygame.sprite.spritecollide(self, water_group, False):
                 game_over = -1
                 game_over_fx.play()
 

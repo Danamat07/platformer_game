@@ -29,7 +29,7 @@ run = True
 tile_size = 30
 game_over = 0
 main_menu = True
-level = 1
+level = 10
 max_levels = 10
 score = 0
 
@@ -45,14 +45,14 @@ exit_img = pygame.image.load('images/exit_button.png')
 shroomRed_left_img = pygame.image.load('images/shroomRedAltLeft.png')
 shroomRed_mid_img = pygame.image.load('images/shroomRedAltMidAlt.png')
 shroomRed_right_img = pygame.image.load('images/shroomRedAltRight.png')
-shroomBrown_left_img = pygame.image.load('images/shroomBrownAltSpotsLeft.png')
-shroomBrown_mid_img = pygame.image.load('images/shroomBrownAltSpotsMidAlt.png')
-shroomBrown_right_img = pygame.image.load('images/shroomBrownAltSpotsRight.png')
 stem_base_img = pygame.image.load('images/stemBaseAlt.png')
 stem_vine_img = pygame.image.load('images/stemVine.png')
 stem_shroom_img = pygame.image.load('images/stemShroom.png')
 stem_crown_img = pygame.image.load('images/stemCrown.png')
 tiny_shroom_img = pygame.image.load('images/tinyShroom_brown.png')
+door_img = pygame.image.load('images/exit.png')
+arrow_img = pygame.image.load('images/arrow.png')
+grass_img = pygame.image.load('images/grass.png')
 
 # load sounds
 pygame.mixer.music.load('audio/music.wav')
@@ -84,7 +84,7 @@ def reset_level(level):
     blob_group.empty()      # Clear blobs
     coin_group.empty()      # Clear coins
     platform_group.empty()  # Clear platforms
-    lava_group.empty()      # Clear lava
+    water_group.empty()      # Clear water
     exit_group.empty()      # Clear exit points
     if level in level_data:
         world_data = level_data[level]
@@ -100,7 +100,7 @@ player = Player(60, screen_height - 78)
 # Create sprite groups for different game entities
 blob_group = pygame.sprite.Group()      # Group for enemy blobs
 platform_group = pygame.sprite.Group()  # Group for platforms
-lava_group = pygame.sprite.Group()      # Group for lava hazards
+water_group = pygame.sprite.Group()      # Group for lava hazards
 coin_group = pygame.sprite.Group()      # Group for collectible coins
 exit_group = pygame.sprite.Group()      # Group for exit points
 
@@ -126,19 +126,23 @@ while run:
 
     clock.tick(fps)                 # control the game's frame rate
     screen.blit(bg_img, (0, 0))     # render the background
-    screen.blit(stem_base_img, (130, 525))
-    screen.blit(stem_crown_img, (130, 435))
-    screen.blit(stem_vine_img, (130, 475))
-    screen.blit(shroomBrown_mid_img, (130, 395))
-    screen.blit(shroomBrown_left_img, (60, 395))
-    screen.blit(shroomBrown_right_img, (200, 395))
-    screen.blit(stem_base_img, (420, 525))
-    screen.blit(stem_shroom_img, (420, 455))
-    screen.blit(stem_crown_img, (420, 350))
-    screen.blit(stem_vine_img, (420, 385))
-    screen.blit(shroomRed_mid_img, (420, 310))
-    screen.blit(shroomRed_left_img, (350, 310))
-    screen.blit(shroomRed_right_img, (490, 310))
+    screen.blit(stem_base_img, (115, 500))
+    screen.blit(stem_crown_img, (115, 410))
+    screen.blit(stem_vine_img, (115, 450))
+    screen.blit(shroomRed_mid_img, (115, 370))
+    screen.blit(shroomRed_left_img, (45, 370))
+    screen.blit(shroomRed_right_img, (185, 370))
+    screen.blit(stem_base_img, (420, 500))
+    screen.blit(stem_shroom_img, (420, 460))
+    screen.blit(stem_vine_img, (420, 400))
+    screen.blit(stem_crown_img, (420, 310))
+    screen.blit(stem_vine_img, (420, 345))
+    screen.blit(shroomRed_mid_img, (420, 270))
+    screen.blit(shroomRed_left_img, (350, 270))
+    screen.blit(shroomRed_right_img, (490, 270))
+    screen.blit(door_img, (60, screen_height - 72))
+    screen.blit(grass_img, (35, screen_height - 70))
+    screen.blit(arrow_img, (92, screen_height - 60))
 
     if main_menu == True:           # check if the main menu is active
         if exit_button.draw():      # check for exit button click to close the game
@@ -161,7 +165,7 @@ while run:
         # draw game elements on the screen
         blob_group.draw(screen)
         platform_group.draw(screen)
-        lava_group.draw(screen)
+        water_group.draw(screen)
         coin_group.draw(screen)
         exit_group.draw(screen)
 
