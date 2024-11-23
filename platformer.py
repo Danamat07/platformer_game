@@ -29,7 +29,7 @@ run = True
 tile_size = 30
 game_over = 0
 main_menu = True
-level = 10
+level = 1
 max_levels = 10
 score = 0
 
