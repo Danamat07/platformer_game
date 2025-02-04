@@ -3,6 +3,9 @@ Welcome to Epic Platformer Adventure, a thrilling 2D journey where you leap, dod
 > ![Languages](https://img.shields.io/badge/Languages-Python-blue)
 
 # 🛠️ Technologies Behind the Magic
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Pygame](https://img.shields.io/badge/Pygame-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![PyCharm](https://img.shields.io/badge/PyCharm-000000?style=for-the-badge&logo=pycharm&logoColor=white)
   - Python: The wizard that brings our game logic to life! 🧙‍♂️✨
   - Pygame: The engine that handles graphics, input, and the heartbeat of the game. 💻🎨
 
