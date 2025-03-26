@@ -1,5 +1,5 @@
-# 🎮 Epic Platformer Adventure 🚀
-Welcome to Epic Platformer Adventure, a thrilling 2D journey where you leap, dodge, collect, and outwit your way through levels packed with excitement! Built with the power of Python 🐍 and Pygame 🎮, this game promises smooth mechanics, challenging obstacles, and loads of fun. Are you ready to take on the challenge and claim victory? Let’s go! 🏃‍♂️🔥
+# 🎮 Inferno Escape 🚀
+Inferno Escape, a thrilling 2D journey where you leap, dodge, collect, and outwit your way through levels packed with excitement! Built with the power of Python 🐍 and Pygame 🎮, this game promises smooth mechanics, challenging obstacles, and loads of fun. Are you ready to take on the challenge and claim victory? Let’s go! 🏃‍♂️🔥
 > ![Languages](https://img.shields.io/badge/Languages-Python-blue)
 
 # 🛠️ Technologies Behind the Magic
