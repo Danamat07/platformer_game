@@ -40,8 +40,11 @@ Here’s a sneak peek behind the scenes:
   - audio/: Background music and effects to pump up the adventure. 🎵
 
 # ⚡ Getting Started
-  1. Install Pygame library for graphics and game functionalities using pip:  "pip install pygame"
-  2. Clone the Repository: "git clone https://github.com/Danamat07/platformer_game.git" then "cd platformer_game"
+  1. Clone the Repository:
+  ```yaml
+  git clone https://github.com/Danamat07/platformer_game.git
+  ```
+  2. Install Pygame library for graphics and game functionalities using pip:  "pip install pygame"
   3. Run the Game:  "python main.py"
 
 # 🎨 Game Assets
